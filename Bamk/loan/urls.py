@@ -5,7 +5,8 @@ from .views import (
     UserLoansView,
     LoanApprovedView,
     LoanRejectedView,
-    AdvisorLoansView
+    AdvisorLoansView,
+    # TokenRefreshView
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("approved/", LoanApprovedView.as_view(), name="loan_approved"),
     path("rejected/", LoanRejectedView.as_view(), name="loan_rejected"),
     path("advisor/", AdvisorLoansView.as_view(), name="advisor_loans"),
+    # path("refresh-token/", TokenRefreshView.as_view(), name="refresh_token"),
 ]

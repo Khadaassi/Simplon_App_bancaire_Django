@@ -23,6 +23,13 @@ class UserRegistrationView(FormView):
         else:
             return redirect('client_dashboard')
 
+# user/views.py - Modifiez votre UserLoginView
+from django.contrib.auth.views import LoginView as AuthLoginView
+from django.shortcuts import redirect
+from django.contrib import messages
+from .services import AuthService
+
+
 class UserLoginView(AuthLoginView):
     template_name = 'login.html'
 
@@ -33,6 +40,27 @@ class UserLoginView(AuthLoginView):
             return reverse_lazy('advisor_dashboard')
         else:
             return reverse_lazy('client_dashboard')
+
+    def form_valid(self, form):
+        # Authentification Django standard
+        response = super().form_valid(form)
+
+        # Authentification API
+        auth_service = AuthService()
+        api_result = auth_service.login(
+            form.cleaned_data['username'],  # ou email selon votre configuration
+            form.cleaned_data['password']
+        )
+
+        if "error" not in api_result:
+            # Stocker le token JWT dans la session
+            self.request.session['jwt_token'] = api_result['access_token']
+        else:
+            # Gérer les erreurs d'authentification API
+            messages.error(self.request, "Erreur d'authentification API")
+
+        return response
+    
 
 class ClientDashboardView(TemplateView):
     template_name = 'client.html'

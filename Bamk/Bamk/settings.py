@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
 ]
 
+# Bamk/settings.py
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,7 +66,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
+    'loan.middleware.JWTMiddleware',  # Ajoutez cette ligne
 ]
+
 
 ROOT_URLCONF = 'Bamk.urls'
 
@@ -162,3 +165,8 @@ CHANNEL_LAYERS = {
         # 'CONFIG': {"hosts": [("127.0.0.1", 6379)]},  # Si Redis est utilisé
     },
 }
+
+
+# Redirection après connexion
+LOGIN_REDIRECT_URL = 'client_dashboard'  # Redirection par défaut pour les clients
+LOGOUT_REDIRECT_URL = 'home'  # Redirection après déconnexion
