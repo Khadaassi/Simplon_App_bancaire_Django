@@ -1,3 +1,4 @@
+<!-- user/templates/client.html (mise à jour) -->
 {% extends "navbar.html" %}
 {% block title %}Client Dashboard - BAMK{% endblock %}
 
@@ -7,7 +8,7 @@
     <p class="text-gray-600">Manage your loans and communicate with your advisor.</p>
     
     <div class="mt-6 grid grid-cols-2 gap-4">
-        <a href="#" class="bg-skyblue text-white p-4 rounded-lg shadow hover:bg-deepblue text-center">
+        <a href="{% url 'client_loans' %}" class="bg-skyblue text-white p-4 rounded-lg shadow hover:bg-deepblue text-center">
             View Loan Requests
         </a>
         <a href="{% url 'chat' %}" class="bg-skyblue text-white p-4 rounded-lg shadow hover:bg-deepblue text-center">

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Mes demandes de prêt</h2>
+  
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    {% if loan %}
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border p-2 text-left">ID</th>
+            <th class="border p-2 text-left">Montant</th>
+            <th class="border p-2 text-left">Statut</th>
+            <th class="border p-2 text-left">Date</th>
+            <th class="border p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in loans %}
+            <tr>
+              <td class="border p-2">{{ loan.id }}</td>
+              <td class="border p-2">{{ loan.gr_appv }} €</td>
+              <td class="border p-2">{{ loan.get_status_display }}</td>
+              <td class="border p-2">{{ loan.created_at|date:"d/m/Y" }}</td>
+              <td class="border p-2">
+                <a href="{% url 'loan_detail' loan.id %}" class="text-blue-500 hover:underline">Détails</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Vous n'avez pas encore fait de demande de prêt.</p>
+    {% endif %}
+  </div>
+  
+  <div class="mt-4">
+    <a href="{% url 'loan_request' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Nouvelle demande</a>
+    <a href="{% url 'client_dashboard' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">Retour au tableau de bord</a>
+  </div>
+{% endblock %}

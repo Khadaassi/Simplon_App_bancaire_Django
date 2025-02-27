@@ -1,7 +1,13 @@
+<!-- loan/templates/loan/result.html -->
 {% extends "base.html" %}
 
 {% block content %}
   <h2>Résultat de la prédiction</h2>
   <p>Approval : <strong>{{ prediction }}</strong></p>
-  <a href="{% url 'loan_request' %}">Faire une autre demande</a>
+  
+  {% if loan_id %}
+    <a href="{% url 'loan_detail' loan_id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Voir les détails</a>
+  {% endif %}
+  
+  <a href="{% url 'loan_request' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">Faire une autre demande</a>
 {% endblock %}

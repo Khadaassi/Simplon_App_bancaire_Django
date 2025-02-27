@@ -1,3 +1,4 @@
+<!-- user/templates/advisor.html (mise à jour) -->
 {% extends "base.html" %}
 {% block title %}Advisor Dashboard - BAMK{% endblock %}
 
@@ -7,8 +8,8 @@
     <p class="text-gray-600">Manage client loan requests and communications.</p>
     
     <div class="mt-6 grid grid-cols-2 gap-4">
-        <a href="#" class="bg-skyblue text-white p-4 rounded-lg shadow hover:bg-deepblue text-center">
-            View Assigned Clients
+        <a href="{% url 'advisor_loans' %}" class="bg-skyblue text-white p-4 rounded-lg shadow hover:bg-deepblue text-center">
+            View Loan Requests
         </a>
         <a href="{% url 'chat' %}" class="bg-skyblue text-white p-4 rounded-lg shadow hover:bg-deepblue text-center">
             Respond to Messages

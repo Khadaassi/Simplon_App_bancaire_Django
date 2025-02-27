@@ -1,0 +1,53 @@
+<!-- loan/templates/loan/loan_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Détails de la demande #{{ loan.id }}</h2>
+  
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="mb-4">
+      <p><strong>Client:</strong> {{ loan.user.username }}</p>
+      <p><strong>État:</strong> {{ loan.state }}</p>
+      <p><strong>NAICS:</strong> {{ loan.naics }}</p>
+      <p><strong>Entreprise:</strong> {% if loan.new_exist == 1 %}Nouvelle{% else %}Existante{% endif %}</p>
+      <p><strong>Emplois conservés:</strong> {{ loan.retained_job }}</p>
+      <p><strong>Code franchise:</strong> {{ loan.franchise_code }}</p>
+      <p><strong>Zone:</strong> {% if loan.urban_rural == 1 %}Urbaine{% else %}Rurale{% endif %}</p>
+      <p><strong>Montant demandé:</strong> {{ loan.gr_appv }} €</p>
+      <p><strong>Banque:</strong> {{ loan.bank }}</p>
+      <p><strong>Durée (mois):</strong> {{ loan.term }}</p>
+      <p><strong>Prédiction IA:</strong> {{ loan.prediction }}</p>
+      <p><strong>Statut:</strong> {{ loan.get_status_display }}</p>
+      <p><strong>Date de création:</strong> {{ loan.created_at|date:"d/m/Y H:i" }}</p>
+      
+      {% if is_advisor %}
+        <p><strong>Notes:</strong> {{ loan.advisor_notes|default:"Aucune note" }}</p>
+      {% endif %}
+    </div>
+    
+    {% if is_advisor and loan.status == 'ai_approved' %}
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="notes" class="block mb-2">Notes:</label>
+          <textarea name="notes" id="notes" class="w-full p-2 border border-gray-300 rounded" rows="3">{{ loan.advisor_notes }}</textarea>
+        </div>
+        <div class="flex space-x-2">
+          <button type="submit" name="approve" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Approuver</button>
+          <button type="submit" name="reject" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Rejeter</button>
+        </div>
+      </form>
+    {% endif %}
+    
+    <div class="mt-4">
+      {% if is_advisor %}
+        <a href="{% url 'advisor_loans' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Retour à la liste</a>
+        {% if not is_owner %}
+          <a href="{% url 'client_history' loan.user.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">Historique client</a>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'client_loans' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Retour à mes prêts</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
