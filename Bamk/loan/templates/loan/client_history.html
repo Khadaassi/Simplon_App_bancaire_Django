@@ -1,41 +1,49 @@
-<!-- loan/templates/loan/client_history.html -->
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 
 {% block content %}
-  <h2>Historique du client: {{ client.username }}</h2>
-  
-  <div class="bg-white p-6 rounded-lg shadow-lg">
-    {% if loans %}
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="border p-2 text-left">ID</th>
-            <th class="border p-2 text-left">Montant</th>
-            <th class="border p-2 text-left">Statut</th>
-            <th class="border p-2 text-left">Date</th>
-            <th class="border p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for loan in loans %}
-            <tr>
-              <td class="border p-2">{{ loan.id }}</td>
-              <td class="border p-2">{{ loan.gr_appv }} €</td>
-              <td class="border p-2">{{ loan.get_status_display }}</td>
-              <td class="border p-2">{{ loan.created_at|date:"d/m/Y" }}</td>
-              <td class="border p-2">
-                <a href="{% url 'loan_detail' loan.id %}" class="text-blue-500 hover:underline">Détails</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>Aucune demande de prêt pour ce client.</p>
-    {% endif %}
-  </div>
-  
-  <div class="mt-4">
-    <a href="{% url 'advisor_loans' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Retour à la liste</a>
-  </div>
+<div class="max-w-5xl mx-auto p-6">
+    <h2 class="text-2xl font-semibold text-deepblue mb-6 text-center">Client Loan History: {{ client.username }}</h2>
+
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        {% if loans %}
+            <table class="w-full border-collapse rounded-lg overflow-hidden">
+                <thead>
+                    <tr class="bg-gray-100 text-left text-gray-700 uppercase text-sm">
+                        <th class="border-b p-3">ID</th>
+                        <th class="border-b p-3">Amount</th>
+                        <th class="border-b p-3">Status</th>
+                        <th class="border-b p-3">Date</th>
+                        <th class="border-b p-3 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="p-3 text-gray-800">{{ loan.id }}</td>
+                            <td class="p-3 text-gray-800 font-semibold">{{ loan.gr_appv }} €</td>
+                            <td class="p-3">
+                                <span class="px-3 py-1 rounded-full text-sm font-medium
+                                    {% if loan.status == 'approved' %} bg-green-100 text-green-600
+                                    {% elif loan.status == 'pending' %} bg-yellow-100 text-yellow-600
+                                    {% else %} bg-red-100 text-red-600 {% endif %}">
+                                    {{ loan.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="p-3 text-gray-700">{{ loan.created_at|date:"d/m/Y" }}</td>
+                            <td class="p-3 text-center">
+                                <a href="{% url 'loan_detail' loan.id %}" class="text-deepblue font-semibold hover:underline">
+                                    View Details
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-500 text-center">No loan requests found for this client.</p>
+        {% endif %}
+    </div>
+
+{% include "back_button.html" %}
+</div>
 {% endblock %}
