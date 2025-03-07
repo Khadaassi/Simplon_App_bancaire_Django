@@ -180,4 +180,9 @@ cython_debug/
 .AppleDouble
 .LSOverride
 
-#Bonjour
+#devcontainer
+.devcontainer/
+
+#staticfiles
+staticfile/
+staticfiles/

@@ -44,9 +44,9 @@ class ClientDashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['news'] = list(News.objects.all())  # Récupérer tous les articles
+        context['news'] = list(News.objects.all())[:10]  # Récupérer tous les articles
         random.shuffle(context['news'])  # Mélanger aléatoirement
-        context['news'] = context['news'][:5]  # Limiter à 5 articles max
+        context['news'] = context['news'][:3]  # Limiter à 5 articles max
         return context
     
 

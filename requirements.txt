@@ -35,3 +35,5 @@ Django==5.1.6
 channels_redis==4.2.1
 redis==5.2.1
 pillow==11.1.0
+whitenoise==6.9.0
+requests==2.32.3mssql-django==1.5
