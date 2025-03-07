@@ -1,5 +1,5 @@
 import os
-import django  # 👈 Ajoute cette ligne
+import django
 from django.core.asgi import get_asgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Bamk.settings')

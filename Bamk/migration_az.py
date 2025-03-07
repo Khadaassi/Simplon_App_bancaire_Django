@@ -23,7 +23,7 @@ username = os.getenv("AZURE_USERNAME")
 password = os.getenv("AZURE_PASSWORD")
 
 
-azure_url = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+17+for+SQL+Server"
+azure_url = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver=ODBC+Driver+18+for+SQL+Server"
 azure_engine = create_engine(azure_url)
 
 

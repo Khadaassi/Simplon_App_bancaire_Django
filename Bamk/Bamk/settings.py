@@ -21,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ⚡ Variables sensibles via .env
 SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = ['localhost', 'localhost:8080', '127.0.0.1']
+
 
 # 🔹 Applications installées
 INSTALLED_APPS = [
@@ -92,7 +93,7 @@ DATABASES = {
         'HOST': os.getenv('AZURE_SERVER'),
         'PORT': '1433',
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
+            'driver': 'ODBC Driver 18 for SQL Server',
             'extra_params': 'TrustServerCertificate=yes',
             'autocommit': True,
         },

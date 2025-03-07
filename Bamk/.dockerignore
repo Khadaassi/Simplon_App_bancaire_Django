@@ -1,0 +1,38 @@
+# Fichiers et dossiers générés par macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Cache et artefacts Python
+__pycache__
+*.py[cod]
+*$py.class
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Contrôle de version
+.git
+.gitignore
+
+# Fichiers de configuration Docker Compose (si présents)
+docker-compose*.yml
+
+# Artefacts de build et distribution
+*.egg-info
+build/
+dist/
+
+# Logs
+*.log
+
+# Dossiers de dépendances (par exemple pour Node.js, si utilisés)
+node_modules/
+
+# Dossier pour les fichiers statiques collectés (généralement recréé lors du collectstatic)
+staticfiles/
+
+# Ne PAS ignorer le dossier media, il contient vos fichiers uploadés
+!media/
