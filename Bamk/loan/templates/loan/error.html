@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "theme/con_base.html" %}
 
 {% block content %}
-  <h2>Erreur</h2>
+  <h2>Error</h2>
   <p>{{ error }}</p>
-  <a href="{% url 'loan_request' %}">Réessayer</a>
+  <a href="{% url 'loan_request' %}">Try again</a>
 {% endblock %}

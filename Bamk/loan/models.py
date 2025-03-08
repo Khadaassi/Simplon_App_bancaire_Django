@@ -2,11 +2,11 @@ from django.db import models
 from user.models import User
 
 class LoanStatus(models.TextChoices):
-    PENDING = 'pending', 'En attente'
-    AI_APPROVED = 'ai_approved', 'Approuvé par IA'
-    AI_REJECTED = 'ai_rejected', 'Rejeté par IA'
-    ADVISOR_APPROVED = 'advisor_approved', 'Approuvé par conseiller'
-    ADVISOR_REJECTED = 'advisor_rejected', 'Rejeté par conseiller'
+    PENDING = 'pending', 'Pending'
+    AI_APPROVED = 'ai_approved', 'AI Approved'
+    AI_REJECTED = 'ai_rejected', 'AI Rejected'
+    ADVISOR_APPROVED = 'advisor_approved', 'Advisor Approved'
+    ADVISOR_REJECTED = 'advisor_rejected', 'Advisor Rejected'
 
 
 class LoanRequest(models.Model):

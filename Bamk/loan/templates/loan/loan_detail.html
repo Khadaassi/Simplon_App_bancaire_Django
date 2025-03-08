@@ -1,81 +1,59 @@
-<!-- loan/templates/loan/loan_detail.html -->
-{% extends "base.html" %}
+{% extends "theme/con_base.html" %}
+
+{% block title %}Loan Request Details #{{ loan.id }} - BAMK{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto mt-10 bg-white p-8 shadow-lg rounded-lg">
-    <h2 class="text-3xl font-semibold text-deepblue mb-6">Request details #{{ loan.id }}</h2>
+    <h2 class="text-3xl font-semibold text-deepblue mb-6">Loan Request Details #{{ loan.id }}</h2>
 
-  <div class="bg-white p-6 rounded-lg shadow-lg">
-    <div class="mb-4">
-      <p><strong>Client:</strong> {{ loan.user.username }}</p>
-      <p><strong>State:</strong> {{ loan.state }}</p>
-      <p><strong>NAICS:</strong> {{ loan.naics }}</p>
-      <p><strong>Entreprise:</strong> {% if loan.new_exist == 1 %}New{% else %}Existing{% endif %}</p>
-      <p><strong>Retained jobs:</strong> {{ loan.retained_job }}</p>
-      <p><strong>Franchise code:</strong> {{ loan.franchise_code }}</p>
-      <p><strong>Zone:</strong> {% if loan.urban_rural == 1 %}Urban{% else %}Rural{% endif %}</p>
-      <p><strong>Approved amount $:</strong> {{ loan.gr_appv }} €</p>
-      <p><strong>Bank:</strong> {{ loan.bank }}</p>
-      <p><strong>Term (month):</strong> {{ loan.term }}</p>
-      <p><strong>AI Prediction:</strong> {{ loan.prediction }}</p>
-      <p><strong>Status:</strong> {{ loan.get_status_display }}</p>
-    </div>
-    {% comment %} <div class="overflow-x-auto">
-        <table class="w-full border-collapse bg-white shadow-md rounded-lg">
-            <thead class="bg-deepblue text-white">
-                <tr>
-                    <th class="px-6 py-3 text-center">Client</th>
-                    <th class="px-6 py-3 text-center">State</th>
-                    <th class="px-6 py-3 text-center">NAICS</th>
-                    <th class="px-6 py-3 text-center">Entreprise</th>
-                    <th class="px-6 py-3 text-center">Retained Jobs</th>
-                    <th class="px-6 py-3 text-center">Franchise code</th>
-                    <th class="px-6 py-3 text-center">Zone</th>
-                    <th class="px-6 py-3 text-center">Approved amount</th>
-                    <th class="px-6 py-3 text-center">Bank</th>
-                    <th class="px-6 py-3 text-center">Term</th>
-                    <th class="px-6 py-3 text-center">AI Prediction</th>
-                    <th class="px-6 py-3 text-center">Status</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y">
-                {% for client in clients %}
-                    <tr class="hover:bg-gray-100">
-                        <td class="px-6 py-4 text-center">{{ loan.user.username }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.state }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.naics }}</td>
-                        <td class="px-6 py-4 text-center">{% if loan.new_exist == 1 %}New{% else %}Existing{% endif %}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.retained_job }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.franchise_code }}</td>
-                        <td class="px-6 py-4 text-center">{% if loan.urban_rural == 1 %}Urban{% else %}Rural{% endif %}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.gr_appv }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.bank }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.term }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.prediction }}</td>
-                        <td class="px-6 py-4 text-center">{{ loan.get_status_display }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table> {% endcomment %}
-
-
-    {% if is_advisor and loan.status == 'ai_approved' %}
-      <form method="post" class="mt-4">
-        {% csrf_token %}
-        <div class="flex space-x-2">
-          <button type="submit" name="approve" class="bg-deepblue text-white px-4 py-2 rounded hover:bg-skyblue">Approuve</button>
-          <button type="submit" name="reject" class="bg-deepblue text-white px-4 py-2 rounded hover:bg-skyblue">Reject</button>
+    <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+        <!-- Client Information -->
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Client Information</h3>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <p><strong>Client:</strong> {{ loan.user.username }}</p>
+            <p><strong>State:</strong> {{ loan.state }}</p>
+            <p><strong>NAICS:</strong> {{ loan.naics }}</p>
+            <p><strong>Business Type:</strong> {% if loan.new_exist == 1 %}New{% else %}Existing{% endif %}</p>
         </div>
-      </form>
-    {% endif %}
 
-    {% comment %} <div class="mt-4">
-      {% if is_advisor %}
-        <a href="{% url 'loan:advisor_loans' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Retour à la liste</a>
-      {% else %}
-        <a href="{% url 'client_dashboard' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Back</a>
-      {% endif %}
-    </div> {% endcomment %}
+        <!-- Loan Details -->
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Loan Details</h3>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <p><strong>Retained Jobs:</strong> {{ loan.retained_job }}</p>
+            <p><strong>Franchise Code:</strong> {{ loan.franchise_code }}</p>
+            <p><strong>Zone:</strong> {% if loan.urban_rural == 1 %}Urban{% else %}Rural{% endif %}</p>
+            <p><strong>Approved Amount:</strong> ${{ loan.gr_appv }}</p>
+            <p><strong>Bank:</strong> {{ loan.bank }}</p>
+            <p><strong>Term:</strong> {{ loan.term }} months</p>
+        </div>
+
+        <!-- Status & Actions -->
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Status & Actions</h3>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <p><strong>AI Prediction:</strong> {{ loan.prediction }}</p>
+            <p><strong>Status:</strong> <span class="px-2 py-1 text-white rounded {% if loan.status == 'ai_approved' %}bg-green-500{% elif loan.status == 'ai_rejected' %}bg-red-500{% else %}bg-gray-500{% endif %}">{{ loan.get_status_display }}</span></p>
+        </div>
+
+        {% if is_advisor and loan.status == 'ai_approved' %}
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="flex justify-center space-x-4">
+                    <button type="submit" name="approve" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">Approve</button>
+                    <button type="submit" name="reject" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition">Reject</button>
+                </div>
+            </form>
+        {% endif %}
+
+        <div class="mt-6 flex justify-center">
+            {% if is_advisor %}
+                <a href="{% url 'loan:advisor_loans' %}" class="bg-deepblue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">Back to List</a>
+            {% else %}
+                <a href="{% url 'loan:client_loans' %}" class="bg-deepblue text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">Back to My Loans</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
-  {% include "back_button.html" %}
+
+<!-- Back Button -->
+{% include "theme/back_button.html" %}
 {% endblock %}

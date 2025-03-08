@@ -11,57 +11,54 @@ from news.models import News
 import random
 
 class HomeView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'user/home.html'
 
 class UserRegistrationView(FormView):
-    template_name = 'register.html'
+    template_name = 'user/register.html'
     form_class = RegistrationForm
-    success_url = reverse_lazy('user:home')  # Fallback redirection
+    success_url = reverse_lazy('user:home')
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        # Redirect based on user role:
-        # If the user is marked as staff, assume they are an advisor.
         if user.is_staff:
             return redirect('user:advisor_dashboard')
         else:
             return redirect('user:client_dashboard')
 
 class UserLoginView(AuthLoginView):
-    template_name = 'login.html'
+    template_name = 'user/login.html'
 
     def get_success_url(self):
         user = self.request.user
-        # Redirect: advisors go to advisor dashboard, others to client dashboard.
         if user.is_staff:
             return reverse_lazy('user:advisor_dashboard')
         else:
             return reverse_lazy('user:client_dashboard')
 
 class ClientDashboardView(TemplateView):
-    template_name = 'client.html'
+    template_name = 'user/client.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['news'] = list(News.objects.all())[:10]  # Récupérer tous les articles
-        random.shuffle(context['news'])  # Mélanger aléatoirement
-        context['news'] = context['news'][:3]  # Limiter à 5 articles max
+        context['news'] = list(News.objects.all())[:10]
+        random.shuffle(context['news'])
+        context['news'] = context['news'][:3]
         return context
     
 
 class AdvisorDashboardView(TemplateView):
-    template_name = 'advisor.html'
+    template_name = 'user/advisor.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['news'] = list(News.objects.all())  # Récupérer tous les articles
-        random.shuffle(context['news'])  # Mélanger aléatoirement
-        context['news'] = context['news'][:5]  # Limiter à 5 articles max
+        context['news'] = list(News.objects.all())
+        random.shuffle(context['news'])
+        context['news'] = context['news'][:5]
         return context
 
 class ListClientView(ListView):
-    template_name = 'list_clients.html'
+    template_name = 'user/list_clients.html'
     context_object_name = 'clients'
 
     def get_queryset(self):
@@ -72,7 +69,7 @@ class ListClientView(ListView):
 
 class ClientFileView(DetailView):
     model = Profile
-    template_name = 'client_file.html'
+    template_name = 'user/client_file.html'
     context_object_name = 'client'
 
     def get_context_data(self, **kwargs):

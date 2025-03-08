@@ -1,41 +1,64 @@
-<!-- loan/templates/loan/client_history.html -->
-{% extends "base.html" %}
+{% extends "theme/con_base.html" %}
+{% load static %}
+
+{% block title %}{{ client.username }}'s History - BAMK{% endblock %}
 
 {% block content %}
-  <h2>Historique du client: {{ client.username }}</h2>
-  
-  <div class="bg-white p-6 rounded-lg shadow-lg">
-    {% if loans %}
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="border p-2 text-left">ID</th>
-            <th class="border p-2 text-left">Montant</th>
-            <th class="border p-2 text-left">Statut</th>
-            <th class="border p-2 text-left">Date</th>
-            <th class="border p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for loan in loans %}
-            <tr>
-              <td class="border p-2">{{ loan.id }}</td>
-              <td class="border p-2">{{ loan.gr_appv }} €</td>
-              <td class="border p-2">{{ loan.get_status_display }}</td>
-              <td class="border p-2">{{ loan.created_at|date:"d/m/Y" }}</td>
-              <td class="border p-2">
-                <a href="{% url 'loan_detail' loan.id %}" class="text-blue-500 hover:underline">Détails</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>Aucune demande de prêt pour ce client.</p>
-    {% endif %}
+<div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ client.username }}'s History</h2>
+  <div class="grid grid-cols-2 gap-8">
+    <!-- Client Information -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Client Information</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-gray-600">Name:</p>
+          <p class="text-gray-800 font-medium">{{ client.username }}</p>
+        </div>
+        <div>
+          <p class="text-gray-600">Email:</p>
+          <p class="text-gray-800 font-medium">{{ client.email }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- Loan History -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Loan History</h3>
+      {% if loans %}
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse bg-white shadow-md rounded-lg">
+            <thead class="bg-deepblue text-white">
+              <tr>
+                <th class="px-4 py-2 text-left">ID</th>
+                <th class="px-4 py-2 text-left">Amount</th>
+                <th class="px-4 py-2 text-left">Status</th>
+                <th class="px-4 py-2 text-left">Date</th>
+                <th class="px-4 py-2 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              {% for loan in loans %}
+                <tr class="hover:bg-gray-100">
+                  <td class="px-4 py-2">{{ loan.id }}</td>
+                  <td class="px-4 py-2">${{ loan.gr_appv }}</td>
+                  <td class="px-4 py-2">{{ loan.get_status_display }}</td>
+                  <td class="px-4 py-2">{{ loan.created_at|date:"F d, Y" }}</td>
+                  <td class="px-4 py-2">
+                    <a href="{% url 'loan:loan_detail' loan.id %}" class="text-blue-500 hover:underline">
+                      Details
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-gray-600">No loan records found.</p>
+      {% endif %}
+    </div>
   </div>
-  
-  <div class="mt-4">
-    <a href="{% url 'advisor_loans' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Retour à la liste</a>
-  </div>
+</div>
+<!-- Back Button -->
+{% include "theme/back_button.html" %}
 {% endblock %}

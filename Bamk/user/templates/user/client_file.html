@@ -1,4 +1,4 @@
-{% extends "navbar.html" %}
+{% extends "theme/con_base.html" %}
 {% load static %}
 
 {% block title %}{{ client.user.username }}'s File - BAMK{% endblock %}
@@ -64,6 +64,6 @@
 </div>
 
 <!-- Back Button -->
-{% include "back_button.html" %}
+{% include "theme/back_button.html" %}
 
 {% endblock %}

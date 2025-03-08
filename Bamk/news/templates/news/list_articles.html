@@ -1,4 +1,4 @@
-{% extends "navbar.html" %}
+{% extends "theme/con_base.html" %}
 {% block content %}
 <div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
     <h1 class="text-3xl font-bold text-deepblue mb-6">My Articles</h1>
@@ -22,7 +22,7 @@
 
                     <!-- Boutons Modifier et Supprimer -->
                     <div class="mt-4 flex space-x-2">
-                        <a href="{% url 'news:news_edit' article.pk %}" class="px-4 py-2 text-deepblue rounded-lg hover:text-skyblue
+                        <a href="{% url 'news:news_update' article.pk %}" class="px-4 py-2 text-deepblue rounded-lg hover:text-skyblue
                          transition">
                             ✏ Edit
                         </a>

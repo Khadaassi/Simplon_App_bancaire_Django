@@ -1,4 +1,4 @@
-{% extends "navbar.html" %}
+{% extends "theme/con_base.html" %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto mt-10 bg-white p-8 shadow-lg rounded-lg">
@@ -43,11 +43,6 @@
         </div>
 
         <div>
-            <label for="{{ form.bank.id_for_label }}" class="block text-gray-700 font-medium mb-2">Bank</label>
-            {{ form.bank }}
-        </div>
-
-        <div>
             <label for="{{ form.term.id_for_label }}" class="block text-gray-700 font-medium mb-2">Term (months)</label>
             {{ form.term }}
         </div>
@@ -59,5 +54,5 @@
 </div>
 
 <!-- Back Button -->
-{% include "back_button.html" %}
+{% include "theme/back_button.html" %}
 {% endblock %}

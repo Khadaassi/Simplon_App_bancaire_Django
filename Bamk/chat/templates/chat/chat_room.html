@@ -1,4 +1,4 @@
-{% extends "navbar.html" %}
+{% extends "theme/con_base.html" %}
 {% block content %}
 <div class="max-w-3xl mx-auto mt-10 bg-white p-6 shadow-lg rounded-lg flex flex-col h-[80vh]">
     
@@ -12,7 +12,7 @@
         <ul id="chat-log" class="space-y-3">
             {% for message in messages %}
                 <li class="flex {% if message.sender == request.user %}justify-end{% else %}justify-start{% endif %}">
-                    <div class="max-w-xs px-4 py-2 rounded-lg shadow-md {% if message.sender == request.user %} bg-blue-500 text-white {% else %} bg-gray-200 text-gray-800 {% endif %}">
+                    <div class="max-w-xs px-4 py-2 rounded-lg shadow-md {% if message.sender == request.user %} bg-deepblue text-white {% else %} bg-gray-200 text-gray-800 {% endif %}">
                         <span class="block font-semibold">{% if message.sender == request.user %}You{% else %}{{ message.sender.username }}{% endif %}</span>
                         <p class="text-sm">{{ message.content }}</p>
                         <span class="text-xs opacity-70 block text-right">{{ message.timestamp|date:"H:i" }}</span>
@@ -25,9 +25,9 @@
     <!-- Input Bar -->
     <div class="flex items-center space-x-2 border-t p-3 bg-gray-100">
         <input id="message-input" type="text" placeholder="Type a message..." 
-               class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+               class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-deepblue" autocomplete="off">
         <button id="send-button" 
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                class="px-4 py-2 bg-deepblue text-white rounded-lg hover:bg-skyblue transition">
             ➤ Send
         </button>
     </div>
@@ -102,5 +102,6 @@
     });
 </script>
 
-{% include "back_button.html" %}
+<!-- Back Button -->
+{% include "theme/back_button.html" %}
 {% endblock %}

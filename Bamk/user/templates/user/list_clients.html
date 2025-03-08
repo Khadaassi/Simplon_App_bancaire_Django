@@ -1,4 +1,4 @@
-{% extends "navbar.html" %}
+{% extends "theme/con_base.html" %}
 {% load static %}
 
 {% block title %}Client List - BAMK{% endblock %}
@@ -24,10 +24,10 @@
                             <td class="px-6 py-4 text-center">{{ client.user.username }}</td>
                             <td class="px-6 py-4 text-center">{{ client.user.email }}</td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{% url 'user:client_file' client.pk %}" class="text-deepblue hover:underline">📁</a>
+                                <a href="{% url 'user:client_detail' client.pk %}" class="text-deepblue hover:underline">📁</a>
                             </td>
                             <td class="px-6 py-4 text-center relative">
-                                <a href="{% url 'chat:client_chat' client.user.pk %}" 
+                                <a href="{% url 'chat:chat_with_client' client.user.pk %}" 
                                    class="relative inline-block px-4 py-2 bg-deepblue rounded-lg hover:bg-skyblue transition">
                                     💬
                                     <!-- 🔴 Notification Badge -->
@@ -47,7 +47,7 @@
     {% endif %}
 </div>
 
-{% include "back_button.html" %}
+{% include "theme/back_button.html" %}
 
 <!-- WebSocket for Message Notifications -->
 <script>

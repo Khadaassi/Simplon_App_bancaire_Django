@@ -1,5 +1,6 @@
-{% extends "navbar.html" %}
+{% extends "theme/con_base.html" %}
 {% load static %}
+
 {% block title %}Advisor Dashboard - BAMK{% endblock %}
 
 {% block content %}
@@ -8,16 +9,15 @@
     <aside class="w-64 bg-white p-6 shadow-lg">
         <h2 class="text-2xl font-bold text-deepblue">Tools</h2>
         <div class="mt-6">
-            <a href="{% url "news:news_create"%}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
-                Write an article
+            <a href="{% url 'news:news_create' %}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+                Write an Article
             </a>
         </div>
         <div class="mt-6">
-            <a href="{% url "news:news_list"%}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
+            <a href="{% url 'news:news_list' %}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                 List Your Articles
             </a>
         </div>
-        <!-- Ajout du lien pour les prêts à valider -->
         <div class="mt-6">
             <a href="{% url 'loan:advisor_loans' %}" class="block bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                 Validate Loans
@@ -26,7 +26,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-max max-w-4xl mx-auto p-6">
+    <main class="flex-1 max-w-4xl mx-auto p-6">
         <div class="bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-3xl font-bold text-deepblue">Advisor Panel</h2>
             <p class="text-gray-600">Manage client loan requests and communications.</p>
@@ -35,7 +35,6 @@
                 <a href="{% url 'user:list_clients' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                     List of Assigned Clients
                 </a>
-                <!-- Ajout du lien pour les prêts à valider -->
                 <a href="{% url 'loan:advisor_loans' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center">
                     Validate Loan Requests
                 </a>
@@ -44,7 +43,6 @@
 
         <!-- News Section -->
         {% include "news/news_carousel.html" %}
-        
     </main>
 </div>
 

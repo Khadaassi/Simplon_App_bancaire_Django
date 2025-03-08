@@ -1,143 +1,133 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
+import os
+import requests
+from dotenv import load_dotenv
+
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView, DetailView, FormView
+
 from loan.api_client import get_auth_token
 from .forms import LoanRequestForm
 from .models import LoanRequest, LoanStatus
-import requests
 from user.models import User
-import os
-from dotenv import load_dotenv
 
+# Load environment variables
 BASEDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASEDIR, '.env'))
 
-# Variables pour l'authentification
 EMAIL = os.getenv("API_EMAIL")
 PASSWORD = os.getenv("API_PASSWORD")
-# URLs de l'API
 API_LOGIN_URL = os.getenv("API_LOGIN_URL")
 API_PREDICT_URL = os.getenv("API_PREDICT_URL")
 
 
-@login_required
-def client_history(request, client_id):
-    """Voir l'historique des prêts d'un client pour les conseillers"""
-    if not request.user.is_staff:
-        messages.error(request, "Accès non autorisé")
-        return redirect('home')
+class ClientHistoryView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = LoanRequest
+    template_name = 'loan/client_history.html'
+    context_object_name = 'loans'
 
-    client = get_object_or_404(User, id=client_id)
-    loans = LoanRequest.objects.filter(user=client).order_by('-created_at')
+    def test_func(self):
+        return self.request.user.is_staff
 
-    return render(request, 'loan/client_history.html', {
-        'client': client,
-        'loans': loans
-    })
+    def get_queryset(self):
+        self.client_obj = get_object_or_404(User, id=self.kwargs['client_id'])
+        return LoanRequest.objects.filter(user=self.client_obj).order_by('-created_at')
 
-@login_required
-def client_loans(request):
-    """Liste des prêts pour un client"""
-    loans = LoanRequest.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'loan/client_loans.html', {'loans': loans})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['client'] = self.client_obj
+        return context
 
-@login_required
-def loan_detail(request, loan_id):
-    """Voir les détails du prêt et permettre au conseiller de valider/rejeter"""
-    loan = get_object_or_404(LoanRequest, id=loan_id)
 
-    # Vérification des permissions
-    is_advisor = request.user.is_staff
-    is_owner = loan.user == request.user
+class ClientLoansView(LoginRequiredMixin, ListView):
+    model = LoanRequest
+    template_name = 'loan/client_loans.html'
+    context_object_name = 'loans'
 
-    if not (is_owner or is_advisor):
-        messages.error(request, "Vous n'avez pas accès à cette demande")
-        return redirect('home')
+    def get_queryset(self):
+        return LoanRequest.objects.filter(user=self.request.user).order_by('-created_at')
 
-    # Gestion de l'approbation/rejet du prêt par le conseiller
-    if is_advisor and request.method == "POST":
-        if 'approve' in request.POST:
-            loan.status = 'advisor_approved'
-            loan.save()
-            messages.success(request, "Prêt approuvé avec succès")
-        elif 'reject' in request.POST:
-            loan.status = 'advisor_rejected'
-            loan.save()
-            messages.success(request, "Prêt rejeté")
 
-    return render(request, 'loan/loan_detail.html', {
-        'loan': loan,
-        'is_advisor': is_advisor,
-        'is_owner': is_owner
-    })
+class LoanDetailView(LoginRequiredMixin, DetailView):
+    model = LoanRequest
+    template_name = 'loan/loan_detail.html'
+    context_object_name = 'loan'
+    pk_url_kwarg = 'loan_id'
 
-@login_required
-def advisor_loans(request):
-    """Afficher les prêts approuvés par l'IA pour validation par le conseiller."""
-    if not request.user.is_staff:
-        messages.error(request, "Accès non autorisé")
-        return redirect('client_dashboard')
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not (request.user.is_staff or self.object.user == request.user):
+            messages.error(request, "You do not have access to this loan request.")
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
-    # Récupérer les prêts approuvés par l'IA
-    loans = LoanRequest.objects.filter(status=LoanStatus.AI_APPROVED).order_by('-created_at')
+    def post(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            action = request.POST.get('action')
+            if action := request.POST.get('approve'):
+                self.object.status = LoanStatus.ADVISOR_APPROVED
+                messages.success(request, "Loan successfully approved.")
+            elif 'reject' in request.POST:
+                self.object.status = LoanStatus.ADVISOR_REJECTED
+                messages.success(request, "Loan rejected.")
+            self.object.save()
+        return redirect(request.path)
 
-    return render(request, 'loan/advisor_loans.html', {'loans': loans})
 
-@login_required
-def loan_request_view(request):
-    user = request.user  # Utilisateur Django
+class AdvisorLoansView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = LoanRequest
+    template_name = 'loan/advisor_loans.html'
+    context_object_name = 'loans'
 
-    # Récupération du token API
-    token = get_auth_token(EMAIL, PASSWORD)
-    if not token:
-        messages.error(request, "Impossible de se connecter à l'API")
-        return redirect("loan_request")   # Rediriger vers la page de formulaire
+    def test_func(self):
+        return self.request.user.is_staff
 
-    if request.method == "POST":
-        form = LoanRequestForm(request.POST)
-        if form.is_valid():
-            loan_request = form.save(commit=False)
-            loan_request.user = user  # Associer la prédiction au User Django
-            loan_request.status = LoanStatus.PENDING  # Initialiser le statut à "pending"
+    def get_queryset(self):
+        return LoanRequest.objects.filter(status=LoanStatus.AI_APPROVED).order_by('-created_at')
+
+
+class LoanRequestView(LoginRequiredMixin, FormView):
+    template_name = 'loan/form.html'
+    form_class = LoanRequestForm
+    success_url = reverse_lazy('loan:loan_request')
+
+    def form_valid(self, form):
+        token = get_auth_token(EMAIL, PASSWORD)
+        if not token:
+            messages.error(self.request, "Unable to connect to prediction API.")
+            return self.form_invalid(form)
+
+        loan_request = form.save(commit=False)
+        loan_request.user = self.request.user
+        loan_request.status = LoanStatus.PENDING
+        loan_request.bank = "BAMK"  # Enforce default bank value
+        loan_request.save()
+
+        data = {
+            "State": loan_request.state,
+            "NAICS": loan_request.naics,
+            "NewExist": loan_request.new_exist,
+            "RetainedJob": loan_request.retained_job,
+            "FranchiseCode": loan_request.franchise_code,
+            "UrbanRural": loan_request.urban_rural,
+            "GrAppv": loan_request.gr_appv,
+            "Bank": loan_request.bank,
+            "Term": loan_request.term,
+        }
+
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.post(API_PREDICT_URL, json=data, headers=headers)
+
+        if response.status_code == 200:
+            prediction_data = response.json()
+            loan_request.prediction = prediction = prediction_data["eligible"]
+            loan_request.status = LoanStatus.AI_APPROVED if prediction else LoanStatus.AI_REJECTED
             loan_request.save()
 
-            # Préparation des données à envoyer
-            data = {
-                "State": loan_request.state,
-                "NAICS": loan_request.naics,
-                "NewExist": loan_request.new_exist,
-                "RetainedJob": loan_request.retained_job,
-                "FranchiseCode": loan_request.franchise_code,
-                "UrbanRural": loan_request.urban_rural,
-                "GrAppv": loan_request.gr_appv,
-                "Bank": loan_request.bank,
-                "Term": loan_request.term,
-            }
+            context = self.get_context_data(form=form, prediction=prediction, shap_plot=response_data.get("shap_plot"))
+            return self.render_to_response(context)
 
-            headers = {"Authorization": f"Bearer {token}"}
-
-            # Envoi de la requête à l'API
-            response = requests.post(API_PREDICT_URL, json=data, headers=headers)
-
-            if response.status_code == 200:
-                prediction = response.json().get("eligible")
-                prediction_values = response.json()
-                loan_request.prediction = prediction
-
-                # Mettre à jour le statut en fonction de la prédiction
-                if prediction:
-                    loan_request.status = LoanStatus.AI_APPROVED  # Approuvé par l'IA
-                else:
-                    loan_request.status = LoanStatus.AI_REJECTED  # Rejeté par l'IA
-
-                loan_request.save()
-                return render(request, "loan/result.html", {"prediction": prediction_values["eligible"], "shap_plot":prediction_values["shap_plot"] })
-            else:
-                messages.error(request, "Erreur lors de la prédiction")
-                return render(request, "loan/error.html", {"error": "Erreur API"})
-            
-    else:
-        form = LoanRequestForm()
-
-    return render(request, "loan/form.html", {"form": form})
+        messages.error(self.request, "An error occurred during the prediction process.")
+        return self.render_to_response(self.get_context_data(form=form))
