@@ -40,7 +40,7 @@
                     <tbody class="divide-y">
                         {% for loan in loans %}
                         <tr class="hover:bg-gray-100">
-                            <td class="px-4 py-2">{{ loan.gr_appv }} €</td>
+                            <td class="px-4 py-2">${{ loan.gr_appv }}</td>
                             <td class="px-4 py-2">{{ loan.get_status_display }}</td>
                             <td class="px-4 py-2">{{ loan.term }} months</td>
                             <td class="px-4 py-2">
