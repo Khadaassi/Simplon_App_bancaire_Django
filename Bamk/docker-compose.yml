@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile  
     container_name: django
     env_file: .env
+    networks:
+      - Bamk_network
     volumes:
       - .:/app
       - media_volume:/app/media
@@ -17,6 +19,8 @@ services:
       context: .
       dockerfile: Dockerfile.nginx
     container_name: nginx
+    networks:
+      - Bamk_network
     ports:
       - "80:80"
     volumes:
@@ -26,3 +30,7 @@ services:
 
 volumes:
   media_volume:
+
+networks:
+  Bamk_network:
+    external: true
