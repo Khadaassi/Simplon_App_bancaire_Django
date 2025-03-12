@@ -117,12 +117,12 @@ DATABASES = {
 }
 
 # Configuration pour l'API FastAPI
-#cdFASTAPI_BASE_URL = os.getenv("FASTAPI_BASE_URL") # Adapte l'URL selon ton environnement
+#FASTAPI_BASE_URL = os.getenv("FASTAPI_BASE_URL") # Adapte l'URL selon ton environnement
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [w
+AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
