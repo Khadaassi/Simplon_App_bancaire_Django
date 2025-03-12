@@ -18,6 +18,8 @@ EMAIL = os.getenv("EMAIL")
 PASSWORD = os.getenv("PASSWORD")
 API_LOGIN_URL = os.getenv("API_LOGIN_URL")
 API_PREDICT_URL = os.getenv("API_PREDICT_URL")
+print("DEBUG : ", API_LOGIN_URL)
+print("DEBUG : ", API_PREDICT_URL)
 
 @login_required
 def client_history(request, client_id):

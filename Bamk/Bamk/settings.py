@@ -12,21 +12,24 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4%tz@cgg0=mtecbkr1@^$$n&$)#$9$m1_y94akyu$n7)9ljqk-'
+SECRET_KEY = os.getenv("SECRET_KEY", "default_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Custom user model
 # AUTH_USER_MODEL = 'user.User'
@@ -93,15 +96,28 @@ ASGI_APPLICATION = 'Bamk.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#USE_TZ = False
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mssql',
+        'NAME': os.getenv('AZURE_DATABASE'),
+        'USER': os.getenv('AZURE_USERNAME'),
+        'PASSWORD': os.getenv('AZURE_PASSWORD'),
+        'HOST': os.getenv('AZURE_SERVER'),
+        'PORT': '1433',  # Port par défaut de SQL Server
+        'OPTIONS': {
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'trustServerCertificate': 'yes',
+            'extra_params': 'MARS_Connection=yes',  
+            'unicode_results': True,
+        },
     }
 }
 
 # Configuration pour l'API FastAPI
-FASTAPI_BASE_URL = "http://localhost:8000"  # Adapte l'URL selon ton environnement
+#cdFASTAPI_BASE_URL = os.getenv("FASTAPI_BASE_URL") # Adapte l'URL selon ton environnement
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
