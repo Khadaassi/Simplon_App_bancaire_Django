@@ -1,10 +1,15 @@
 import requests
+from dotenv import load_dotenv
+import os
 
-API_URL = "http://127.0.0.1:8000"
-LOGIN_ENDPOINT = "/auth/login"
+load_dotenv()
+
+
+API_LOGIN_URL = os.getenv("API_LOGIN_URL")
+
 
 def get_auth_token(email, password):
-    url = f"{API_URL}{LOGIN_ENDPOINT}"
+    url = API_LOGIN_URL
     payload = {"email": email, "password": password}
     
     try:

@@ -13,15 +13,10 @@
                 <span class="text-red-600 font-semibold">Rejected</span>
             {% endif %}
         </p>
-
-        {% if shap_plot %}
-            <h3 class="mt-6 mb-3 text-lg text-gray-600 font-medium">Explanation of the decision</h3>
-            <img src="{{ shap_plot }}" alt="SHAP explanation plot" class="mx-auto rounded-lg shadow">
-        {% endif %}
     </div>
 
     <div class="mt-6 flex justify-center space-x-4">
-        <a href="{% url 'loan:loan_request' %}" class="px-4 py-2 bg-deepblue text-white rounded hover:bg-blue-600">
+        <a href="{% url 'loan:request' %}" class="px-4 py-2 bg-deepblue text-white rounded hover:bg-blue-600">
             Request Another Loan
         </a>
         <a href="{% url 'loan:client_loans' %}" class="px-4 py-2 rounded border border-deepblue text-deepblue hover:bg-deepblue hover:text-white">

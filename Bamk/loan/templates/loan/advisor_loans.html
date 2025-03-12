@@ -40,5 +40,9 @@
   </div>
 </div>
 <!-- Back Button -->
-{% include "theme/back_button.html" %}
+<div class="mt-8">
+  <a href="{% url 'user:list_clients' %}" class="px-4 py-2 bg-white text-navy rounded-lg shadow hover:bg-skyblue transition">
+      ← Back
+  </a>
+</div>
 {% endblock %}

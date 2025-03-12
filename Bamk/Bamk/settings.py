@@ -15,6 +15,11 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
+API_LOGIN_URL = os.getenv('API_LOGIN_URL')
+API_PREDICT_URL = os.getenv('API_PREDICT_URL')
+print("DEBUG#####", API_LOGIN_URL)
+print("DEBUG#####",API_PREDICT_URL)
+
 # Base settings
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
@@ -135,8 +140,6 @@ CHANNEL_LAYERS = {
 }
 
 # FastAPI integration
-FASTAPI_BASE_URL = os.getenv('FASTAPI_BASE_URL', 'http://localhost:8000')
-
 # # Debug Toolbar (optional)
 # if DEBUG:
 #     INSTALLED_APPS += ['debug_toolbar']

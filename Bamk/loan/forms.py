@@ -1,22 +1,17 @@
 from django import forms
 from .models import LoanRequest
 
-# Déclaration des choix pour plus de clarté et de réutilisation
-BUSINESS_CHOICES = [(1, "New Business"), (2, "Existing Business")]
-ZONE_CHOICES = [(1, "Urban"), (2, "Rural"), (0, "Non specified")]
-
 class LoanRequestForm(forms.ModelForm):
-    """ Form for clients to request a loan. """
 
     state = forms.CharField(
         label="State",
         max_length=50,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Ex: CA'
+            'placeholder': 'Ex: California'
         })
     )
-
+    
     naics = forms.IntegerField(
         label="NAICS code",
         widget=forms.NumberInput(attrs={
@@ -27,7 +22,7 @@ class LoanRequestForm(forms.ModelForm):
 
     new_exist = forms.ChoiceField(
         label="New or existing business",
-        choices=BUSINESS_CHOICES,
+        choices=[(1, "Nouvelle entreprise"), (2, "Entreprise existante")],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
@@ -51,17 +46,26 @@ class LoanRequestForm(forms.ModelForm):
 
     urban_rural = forms.ChoiceField(
         label="Zone (urban or rural)",
-        choices=ZONE_CHOICES,
+        choices=[(1, "Urban"), (2, "Rural"), (0, "Non specified")],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
     gr_appv = forms.FloatField(
-        label="Approved amount ($)",
+        label="Approved amount",
         min_value=0,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
             'placeholder': 'Ex: 50000.00',
             'step': '0.01'
+        })
+    )
+
+    bank = forms.CharField(
+        label="Bank",
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Ex: Bank of America'
         })
     )
 
@@ -77,11 +81,5 @@ class LoanRequestForm(forms.ModelForm):
     class Meta:
         model = LoanRequest
         fields = ['state', 'naics', 'new_exist', 'retained_job', 'franchise_code', 
-                  'urban_rural', 'gr_appv', 'term']
-
-    def clean_naics(self):
-        """ Validation for NAICS code (should be a 6-digit number). """
-        naics = self.cleaned_data.get('naics')
-        if not (100000 <= naics <= 999999):
-            raise forms.ValidationError("NAICS code must be a 6-digit number.")
-        return naics
+                  'urban_rural', 'gr_appv', 'bank', 'term']
+    
