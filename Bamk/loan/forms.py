@@ -8,7 +8,7 @@ class LoanRequestForm(forms.ModelForm):
         max_length=50,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Ex: California'
+            'placeholder': 'Ex: CA'
         })
     )
     
@@ -22,7 +22,7 @@ class LoanRequestForm(forms.ModelForm):
 
     new_exist = forms.ChoiceField(
         label="New or existing business",
-        choices=[(1, "Nouvelle entreprise"), (2, "Entreprise existante")],
+        choices=[(1, "New business"), (2, "Existing business")],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
@@ -63,11 +63,8 @@ class LoanRequestForm(forms.ModelForm):
     bank = forms.CharField(
         label="Bank",
         max_length=100,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Ex: Bank of America'
-        })
-    )
+        initial="Bamk",
+        )
 
     term = forms.IntegerField(
         label="Term (months)",
@@ -82,4 +79,3 @@ class LoanRequestForm(forms.ModelForm):
         model = LoanRequest
         fields = ['state', 'naics', 'new_exist', 'retained_job', 'franchise_code', 
                   'urban_rural', 'gr_appv', 'bank', 'term']
-    
