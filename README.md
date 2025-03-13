@@ -142,10 +142,10 @@ Users can expect the following outputs:
     <img src="Bamk/theme/static/images/HomePage.png" alt="Project Logo" width=auto>
 </p>
 
-<p align="center"><i>Link only valid for internal use.</i></p>
 
 <p align="center">Link ➔ <a href="http://bamkapp.francecentral.azurecontainer.io:8080">http://bamkapp.francecentral.azurecontainer.io:8080 </a>
 </p>
+<p align="center"><i>Link only valid for internal use.</i></p>
 
 ---
 
@@ -185,3 +185,12 @@ Khadija Aassi
 <a href="https://github.com/Khadaassi" target="_blank">
     <img loading="lazy" src="Bamk/theme/static/images/github-mark copie.png" width="30" height="30" style="vertical-align: middle; margin-left: 10px;" alt="GitHub Logo">
 </a>
+- **Ludivine Raby**
+  <a href="https://github.com/ludivineRB" target="_blank">
+      <img loading="lazy" src="Bamk/theme/static/images/github-mark copie.png" width="30" height="30" style="vertical-align: middle; float: middle; margin-left: 30px;" alt="GitHub Logo">
+  </a>
+
+- **Raouf Addeche**
+  <a href="https://github.com/RaoufAddeche" target="_blank">
+      <img loading="lazy" src="Bamk/theme/static/images/github-mark copie.png" width="30" height="30" style="vertical-align: middle; float: middle; margin-left: 30px;" alt="GitHub Logo">
+  </a>
