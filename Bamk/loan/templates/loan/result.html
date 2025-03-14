@@ -1,13 +1,12 @@
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 
 {% block content %}
   <h2 class="text-3xl font-bold text-deepblue">Result</h2>
   <p class="text-gray-600">Approval : <strong>{{ prediction }}</strong></p>
 
-  {% if shap_plot %}
-    <h3 class="text-gray-600">How do we explain the result ?</h3>
-    <img src="{{ shap_plot }}" alt="SHAP Values">
-  {% endif %}
-
-  <a href="{% url 'loan:loan_request' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition">Request an other loan</a>
+  <div class="mt-6">
+    <a href="{% url 'loan:loan_request' %}" class="bg-deepblue text-white p-4 rounded-lg shadow hover:bg-skyblue text-center transition">
+      Request another loan
+    </a>
+  </div>
 {% endblock %}
